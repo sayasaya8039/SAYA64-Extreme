@@ -1,8 +1,8 @@
 ; SAYA64 Extreme - Inno Setup Script
-; v2.1.0
+; v2.2.0
 
 #define MyAppName "SAYA64 Extreme"
-#define MyAppVersion "2.1.0"
+#define MyAppVersion "2.2.0"
 #define MyAppPublisher "SAYA64 Project"
 #define MyAppURL "https://github.com/saya64extreme"
 #define MyAppExeName "SAYA64Extreme.exe"
