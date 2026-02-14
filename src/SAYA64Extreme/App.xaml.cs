@@ -1,5 +1,6 @@
 using System.Windows;
 using SAYA64Extreme.Services;
+using Application = System.Windows.Application;
 
 namespace SAYA64Extreme;
 

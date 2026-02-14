@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SAYA64Extreme.Models;
 using SAYA64Extreme.Services;
+using Timer = System.Threading.Timer;
 
 namespace SAYA64Extreme.ViewModels;
 
