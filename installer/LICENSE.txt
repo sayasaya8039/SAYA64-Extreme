@@ -1,0 +1,17 @@
+SAYA64 Extreme v2.1.0
+System Information & Diagnostic Tool
+
+Copyright (c) 2024-2026 SAYA64 Project. All rights reserved.
+
+This software is provided "as is", without warranty of any kind, express or
+implied, including but not limited to the warranties of merchantability,
+fitness for a particular purpose and noninfringement.
+
+This software uses the following open-source libraries:
+- LibreHardwareMonitorLib (MPL-2.0 License)
+- CommunityToolkit.Mvvm (MIT License)
+
+LibreHardwareMonitor is licensed under the Mozilla Public License 2.0.
+Source code available at: https://github.com/LibreHardwareMonitor/LibreHardwareMonitor
+
+By installing this software, you agree to these terms.
