@@ -6,6 +6,7 @@
 #define MyAppPublisher "SAYA64 Project"
 #define MyAppURL "https://github.com/saya64extreme"
 #define MyAppExeName "SAYA64Extreme.exe"
+#define MySrcDir "D:\NEXTCLOUD\Windows_app\SAYA64 Extreme"
 
 [Setup]
 AppId={{A7E3F4B2-9C1D-4E6F-8A2B-5D3C7F1E9B4A}
@@ -17,9 +18,9 @@ AppPublisherURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
-OutputDir=..\installer\output
+OutputDir={#MySrcDir}\installer\output
 OutputBaseFilename=SAYA64Extreme_v{#MyAppVersion}_Setup
-SetupIconFile=..\installer\app.ico
+SetupIconFile={#MySrcDir}\installer\app.ico
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
@@ -29,7 +30,7 @@ ArchitecturesInstallIn64BitMode=x64compatible
 UninstallDisplayIcon={app}\{#MyAppExeName}
 VersionInfoVersion={#MyAppVersion}.0
 VersionInfoProductName={#MyAppName}
-LicenseFile=..\installer\LICENSE.txt
+LicenseFile={#MySrcDir}\installer\LICENSE.txt
 
 [Languages]
 Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"
@@ -39,7 +40,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\publish\win-x64\SAYA64Extreme.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MySrcDir}\src\SAYA64Extreme\bin\Release\net8.0-windows\win-x64\publish\SAYA64Extreme.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
