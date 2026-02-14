@@ -1,0 +1,141 @@
+{
+  "$schema": "https://claude.ai/schemas/settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(bun *)",
+      "Bash(bunx *)",
+      "Bash(bunx playwright *)",
+      "Bash(cargo *)",
+      "Bash(code *)",
+      "Bash(codex-fetch *)",
+      "Bash(codex *)",
+      "Bash(cp *)",
+      "Bash(crx3 *)",
+      "Bash(cursor *)",
+      "Bash(gh )",
+      "Bash(git *)",
+      "Bash(go *)",
+      "Bash(jest *)",
+      "Bash(ls *)",
+      "Bash(mkdir *)",
+      "Bash(mv *)",
+      "Bash(mypy *)",
+      "Bash(node *)",
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(ollama *)",
+      "Bash(pip *)",
+      "Bash(pnpm *)",
+      "Bash(pyinstaller *)",
+      "Bash(pytest *)",
+      "Bash(python *)",
+      "Bash(rm -r *)",
+      "Bash(ruff *)",
+      "Bash(rustc *)",
+      "Bash(tauri *)",
+      "Bash(tsc *)",
+      "Bash(uv *)",
+      "Bash(vitest *)",
+      "Bash(web-ext *)",
+      "Bash(wrangler *)",
+      "Bash(yarn *)",
+      "Bash(antigravity *)",
+      "Bash(ralph *)",
+      "Bash(bnmp *)",
+      "Bash(zig *)",
+      "Bash(sw *)",
+      "Bash(playwright-cli *)",
+      "Glob",
+      "Grep",
+      "NotebookEdit",
+      "Read(*)",
+      "Task",
+      "TodoWrite",
+      "WebFetch",
+      "WebSearch"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~)",
+      "Bash(rm -rf /*)",
+      "Bash(> /dev/sda)",
+      "Bash(:(){:|:&};:)",
+      "Bash(mkfs*)",
+      "Bash(dd if=*)",
+      "mcp__claude-in-chrome__*",
+      "mcp__codex-cli__*"
+    ]
+  },
+  "env": {
+    "LANG": "ja_JP.UTF-8",
+    "BUN_INSTALL": "/c/Users/Owner/.bun"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bun x ccusage statusline"
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "mcp__codex__codex",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo {\"systemMessage\":\"【必須】threadId受信時は codex-fetch <threadId> をUTF-8で実行して本文を取得すること\"}"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo {\\\"systemMessage\\\":\\\"【Tier 0】/codex \\\"プロンプト\\\": /architect, /plan-reviewer, /code-reviewer, /security-analyst | threadId受信後は codex-fetch で結果取得(UTF-8) | 日本語OK\\\"}"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo {\\\"systemMessage\\\":\\\"コンテキスト圧縮! 【絶対忘れない】/codex + codex-fetch(UTF-8) | 日本語OK\\\"}"
+          }
+        ]
+      },
+      {
+        "matcher": "context",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo {\\\"systemMessage\\\":\\\"【Tier 0】/codex継続: threadId→codex-fetch(UTF-8)で本文取得 | 日本語対応\\\"}"
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "manual",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"D:/NEXTCLOUD/extensions/CLAUDE_STTING/.claude/scripts/pre-compact-save-context.sh\""
+          }
+        ]
+      },
+      {
+        "matcher": "auto",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"D:/NEXTCLOUD/extensions/CLAUDE_STTING/.claude/scripts/pre-compact-save-context.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}
