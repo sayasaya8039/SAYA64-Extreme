@@ -55,7 +55,7 @@ public partial class MainViewModel : ObservableObject, IDisposable
         Categories = _categoryViewModel.Categories;
         LoadStaticData("computer");
         _sensorViewModel.StartMonitoring();
-        StatusText = "Ready";
+        StatusText = LanguageService.GetString("Status_Ready");
     }
 
     public void Cleanup()
@@ -66,6 +66,26 @@ public partial class MainViewModel : ObservableObject, IDisposable
     public void OnCategorySelected(CategoryNode node)
     {
         _categoryViewModel.OnCategorySelected(node);
+    }
+
+    public void ChangeLanguage(string lang)
+    {
+        LanguageService.SetLanguage(lang);
+
+        // カテゴリツリーを再構築して言語を反映
+        _staticDataCache.Clear();
+        _categoryViewModel.BuildCategoryTree();
+        Categories = _categoryViewModel.Categories;
+
+        // 現在のビューを再読み込み
+        if (_currentCategoryId.StartsWith("sensor"))
+            LoadSensorData(_currentCategoryId);
+        else if (_currentCategoryId.StartsWith("bench"))
+            LoadBenchmarkView(_currentCategoryId);
+        else
+            LoadStaticData(_currentCategoryId);
+
+        StatusText = LanguageService.GetString("Status_LanguageChanged");
     }
 
     private void OnCategoryChangedInternal(CategoryNode node)
@@ -90,13 +110,12 @@ public partial class MainViewModel : ObservableObject, IDisposable
 
     private void LoadStaticData(string categoryId)
     {
-        StatusText = $"Loading {categoryId} data...";
+        StatusText = LanguageService.GetString("Status_Loading");
 
-        // processes はキャッシュしない（リアルタイム性が必要）
         if (categoryId != "processes" && _staticDataCache.TryGetValue(categoryId, out var cached))
         {
             CurrentItems = new ObservableCollection<object>(cached);
-            StatusText = $"{categoryId} - {cached.Count} items (cached)";
+            StatusText = $"{categoryId} - {cached.Count} {LanguageService.GetString("Status_ItemsLoaded")} ({LanguageService.GetString("Status_Cached")})";
             return;
         }
 
@@ -115,27 +134,27 @@ public partial class MainViewModel : ObservableObject, IDisposable
             "software" or "programs" => _softwareService.GetInstalledPrograms(),
             "processes" => _softwareService.GetProcessList(),
             "devices" or "usb" => _softwareService.GetUsbDevices(),
-            _ => new List<SystemItem> { new() { Name = "Info", Value = "Select a category from the tree" } }
+            _ => new List<SystemItem> { new() { Name = "Info", Value = LanguageService.GetString("Status_SelectCategory") } }
         };
 
         if (categoryId != "processes")
             _staticDataCache[categoryId] = items;
         CurrentItems = new ObservableCollection<object>(items);
-        StatusText = $"{categoryId} - {items.Count} items loaded";
+        StatusText = $"{categoryId} - {items.Count} {LanguageService.GetString("Status_ItemsLoaded")}";
     }
 
     private void LoadSensorData(string sensorCategoryId)
     {
         var readings = _sensorViewModel.GetFilteredReadings(sensorCategoryId);
         CurrentItems = new ObservableCollection<object>(readings);
-        StatusText = $"Sensor - {readings.Count} readings";
+        StatusText = $"Sensor - {readings.Count} {LanguageService.GetString("Status_SensorReadings")}";
     }
 
     private void LoadBenchmarkView(string benchId)
     {
         var items = new List<SystemItem>
         {
-            new() { Name = "Status", Value = "Click 'Run Benchmark' from Tools menu to start", CategoryId = benchId }
+            new() { Name = "Status", Value = LanguageService.GetString("Status_BenchmarkHint"), CategoryId = benchId }
         };
         CurrentItems = new ObservableCollection<object>(items);
         StatusText = $"Benchmark - {benchId}";
@@ -149,7 +168,7 @@ public partial class MainViewModel : ObservableObject, IDisposable
     [RelayCommand]
     private void Refresh()
     {
-        StatusText = "Refreshing...";
+        StatusText = LanguageService.GetString("Status_Refreshing");
         _staticDataCache.Clear();
 
         _sensorViewModel.RefreshSensorsCommand.Execute(null);
@@ -159,7 +178,7 @@ public partial class MainViewModel : ObservableObject, IDisposable
         else if (!_currentCategoryId.StartsWith("bench"))
             LoadStaticData(_currentCategoryId);
 
-        StatusText = "Refresh complete";
+        StatusText = LanguageService.GetString("Status_RefreshComplete");
     }
 
     [RelayCommand]
@@ -167,30 +186,30 @@ public partial class MainViewModel : ObservableObject, IDisposable
     {
         try
         {
-            StatusText = "Generating report...";
+            StatusText = LanguageService.GetString("Status_GeneratingReport");
             var filePath = _reportService.ExportToFile();
-            StatusText = $"Report saved: {filePath}";
+            StatusText = $"{LanguageService.GetString("Status_ReportSaved")}{filePath}";
         }
         catch (Exception ex)
         {
-            StatusText = $"Report error: {ex.Message}";
+            StatusText = $"{LanguageService.GetString("Status_ReportError")}{ex.Message}";
         }
     }
 
     [RelayCommand]
     private void RunBenchmark()
     {
-        StatusText = "Running memory benchmark...";
+        StatusText = LanguageService.GetString("Status_RunningBenchmark");
         try
         {
             var results = _benchmarkService.RunMemoryBenchmark();
             _staticDataCache["bench-memory"] = results;
             CurrentItems = new ObservableCollection<object>(results);
-            StatusText = $"Benchmark complete - {results.Count} results";
+            StatusText = $"{LanguageService.GetString("Status_BenchmarkComplete")} - {results.Count} {LanguageService.GetString("Status_BenchmarkResults")}";
         }
         catch (Exception ex)
         {
-            StatusText = $"Benchmark error: {ex.Message}";
+            StatusText = $"{LanguageService.GetString("Status_BenchmarkError")}{ex.Message}";
         }
     }
 

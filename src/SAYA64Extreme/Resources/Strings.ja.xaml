@@ -1,0 +1,108 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Window -->
+    <sys:String x:Key="WindowTitle">SAYA64 Extreme - システム情報</sys:String>
+
+    <!-- Menu: File -->
+    <sys:String x:Key="Menu_File">ファイル(_F)</sys:String>
+    <sys:String x:Key="Menu_Preferences">設定(_P)</sys:String>
+    <sys:String x:Key="Menu_Exit">終了(_X)</sys:String>
+
+    <!-- Menu: View -->
+    <sys:String x:Key="Menu_View">表示(_V)</sys:String>
+    <sys:String x:Key="Menu_Refresh">更新(_R)</sys:String>
+    <sys:String x:Key="Menu_ExpandAll">すべて展開(_E)</sys:String>
+    <sys:String x:Key="Menu_CollapseAll">すべて折りたたむ(_C)</sys:String>
+
+    <!-- Menu: Report -->
+    <sys:String x:Key="Menu_Report">レポート(_R)</sys:String>
+    <sys:String x:Key="Menu_GenerateReport">HTMLレポート生成(_H)</sys:String>
+
+    <!-- Menu: Tools -->
+    <sys:String x:Key="Menu_Tools">ツール(_T)</sys:String>
+    <sys:String x:Key="Menu_MemoryBenchmark">メモリベンチマーク(_M)</sys:String>
+
+    <!-- Menu: Language -->
+    <sys:String x:Key="Menu_Language">言語(_L)</sys:String>
+    <sys:String x:Key="Menu_Lang_Japanese">日本語</sys:String>
+    <sys:String x:Key="Menu_Lang_English">English</sys:String>
+
+    <!-- Menu: Help -->
+    <sys:String x:Key="Menu_Help">ヘルプ(_H)</sys:String>
+    <sys:String x:Key="Menu_About">SAYA64 Extremeについて(_A)</sys:String>
+
+    <!-- Toolbar -->
+    <sys:String x:Key="Toolbar_Refresh">更新</sys:String>
+    <sys:String x:Key="Toolbar_Benchmark">ベンチマーク</sys:String>
+    <sys:String x:Key="Toolbar_Report">レポート</sys:String>
+    <sys:String x:Key="Tooltip_Refresh">すべてのデータを更新</sys:String>
+    <sys:String x:Key="Tooltip_Benchmark">メモリベンチマークを実行</sys:String>
+    <sys:String x:Key="Tooltip_Report">HTMLレポートを生成</sys:String>
+
+    <!-- DataGrid Headers -->
+    <sys:String x:Key="Header_Property">プロパティ</sys:String>
+    <sys:String x:Key="Header_Value">値</sys:String>
+
+    <!-- About Dialog -->
+    <sys:String x:Key="About_Title">SAYA64 Extremeについて</sys:String>
+    <sys:String x:Key="About_Message">SAYA64 Extreme v2.0.0
+
+システム情報・診断ツール
+
+AIDA64にインスパイアされたシステム情報ユーティリティ。
+LibreHardwareMonitorで駆動。</sys:String>
+
+    <!-- Status Messages -->
+    <sys:String x:Key="Status_Ready">準備完了</sys:String>
+    <sys:String x:Key="Status_Refreshing">更新中...</sys:String>
+    <sys:String x:Key="Status_RefreshComplete">更新完了</sys:String>
+    <sys:String x:Key="Status_GeneratingReport">レポート生成中...</sys:String>
+    <sys:String x:Key="Status_ReportSaved">レポート保存: </sys:String>
+    <sys:String x:Key="Status_ReportError">レポートエラー: </sys:String>
+    <sys:String x:Key="Status_RunningBenchmark">メモリベンチマーク実行中...</sys:String>
+    <sys:String x:Key="Status_BenchmarkComplete">ベンチマーク完了</sys:String>
+    <sys:String x:Key="Status_BenchmarkError">ベンチマークエラー: </sys:String>
+    <sys:String x:Key="Status_Loading">読み込み中...</sys:String>
+    <sys:String x:Key="Status_ItemsLoaded">件のデータを読み込みました</sys:String>
+    <sys:String x:Key="Status_Cached">キャッシュ済み</sys:String>
+    <sys:String x:Key="Status_SensorReadings">件のセンサー読み取り</sys:String>
+    <sys:String x:Key="Status_BenchmarkResults">件の結果</sys:String>
+    <sys:String x:Key="Status_LanguageChanged">言語を変更しました（一部は再起動後に反映されます）</sys:String>
+    <sys:String x:Key="Status_SensorActive">センサー監視中</sys:String>
+    <sys:String x:Key="Status_SelectCategory">ツリーからカテゴリを選択してください</sys:String>
+    <sys:String x:Key="Status_BenchmarkHint">ツールメニューから「ベンチマーク実行」を選択してください</sys:String>
+
+    <!-- Category Names -->
+    <sys:String x:Key="Cat_Computer">コンピュータ</sys:String>
+    <sys:String x:Key="Cat_Summary">サマリー</sys:String>
+    <sys:String x:Key="Cat_Motherboard">マザーボード</sys:String>
+    <sys:String x:Key="Cat_CPU">CPU</sys:String>
+    <sys:String x:Key="Cat_Memory">メモリ</sys:String>
+    <sys:String x:Key="Cat_SPD">SPD</sys:String>
+    <sys:String x:Key="Cat_Display">ディスプレイ</sys:String>
+    <sys:String x:Key="Cat_GPU">GPU</sys:String>
+    <sys:String x:Key="Cat_Monitor">モニター</sys:String>
+    <sys:String x:Key="Cat_Storage">ストレージ</sys:String>
+    <sys:String x:Key="Cat_Disks">ディスク</sys:String>
+    <sys:String x:Key="Cat_SMART">S.M.A.R.T.</sys:String>
+    <sys:String x:Key="Cat_Network">ネットワーク</sys:String>
+    <sys:String x:Key="Cat_Software">ソフトウェア</sys:String>
+    <sys:String x:Key="Cat_InstalledPrograms">インストール済みプログラム</sys:String>
+    <sys:String x:Key="Cat_Processes">プロセス</sys:String>
+    <sys:String x:Key="Cat_Devices">デバイス</sys:String>
+    <sys:String x:Key="Cat_USBDevices">USBデバイス</sys:String>
+    <sys:String x:Key="Cat_OS">オペレーティングシステム</sys:String>
+    <sys:String x:Key="Cat_Sensor">センサー</sys:String>
+    <sys:String x:Key="Cat_Temperatures">温度</sys:String>
+    <sys:String x:Key="Cat_CoolingFans">冷却ファン</sys:String>
+    <sys:String x:Key="Cat_Voltages">電圧</sys:String>
+    <sys:String x:Key="Cat_Power">電力</sys:String>
+    <sys:String x:Key="Cat_Clocks">クロック</sys:String>
+    <sys:String x:Key="Cat_Utilization">使用率</sys:String>
+    <sys:String x:Key="Cat_Benchmark">ベンチマーク</sys:String>
+    <sys:String x:Key="Cat_MemoryBenchmark">メモリベンチマーク</sys:String>
+    <sys:String x:Key="Cat_CPUBenchmark">CPUベンチマーク</sys:String>
+
+</ResourceDictionary>

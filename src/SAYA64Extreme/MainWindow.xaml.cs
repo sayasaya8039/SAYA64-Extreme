@@ -1,6 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using SAYA64Extreme.Models;
+using SAYA64Extreme.Services;
 using SAYA64Extreme.ViewModels;
 
 namespace SAYA64Extreme;
@@ -68,11 +69,23 @@ public partial class MainWindow : Window
         }
     }
 
+    private void Language_Japanese_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel vm)
+            vm.ChangeLanguage("ja");
+    }
+
+    private void Language_English_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel vm)
+            vm.ChangeLanguage("en");
+    }
+
     private void About_Click(object sender, RoutedEventArgs e)
     {
         MessageBox.Show(
-            "SAYA64 Extreme v2.0.0\n\nSystem Information & Diagnostic Tool\n\nAIDA64-inspired system information utility.\nPowered by LibreHardwareMonitor.",
-            "About SAYA64 Extreme",
+            LanguageService.GetString("About_Message"),
+            LanguageService.GetString("About_Title"),
             MessageBoxButton.OK,
             MessageBoxImage.Information);
     }
