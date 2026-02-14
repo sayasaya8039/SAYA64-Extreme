@@ -21,4 +21,14 @@ public partial class SensorReading : ObservableObject
 
     public string Unit { get; set; } = string.Empty;
     public string HardwareName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// DataGrid の {Binding Value} 用。CurrentValue を返し、リアルタイム更新に追従する。
+    /// </summary>
+    public string Value => CurrentValue;
+
+    partial void OnCurrentValueChanged(string value)
+    {
+        OnPropertyChanged(nameof(Value));
+    }
 }
