@@ -9,12 +9,16 @@ namespace SAYA64Extreme.ViewModels;
 public partial class SensorViewModel : ObservableObject, IDisposable
 {
     private readonly SensorService _sensorService;
+    private readonly SensorCorrectionService _correctionService;
+    private readonly SensorAlertService _alertService;
+    private readonly SensorSharingService _sharingService;
     private Timer? _backgroundTimer;
     private ObservableCollection<SensorReading>? _allReadings;
     private ObservableCollection<SensorReading>? _currentFilteredView;
     private bool _isMonitoring;
     private bool _disposed;
     private string _lastFilterCategory = "sensor";
+    private int _pollingIntervalMs = 1000;
 
     [ObservableProperty]
     private ObservableCollection<SensorReading> currentReadings = new();
@@ -36,6 +40,9 @@ public partial class SensorViewModel : ObservableObject, IDisposable
     public SensorViewModel(SensorService sensorService)
     {
         _sensorService = sensorService;
+        _correctionService = new SensorCorrectionService();
+        _alertService = new SensorAlertService();
+        _sharingService = new SensorSharingService();
     }
 
     public void StartMonitoring()
@@ -126,6 +133,9 @@ public partial class SensorViewModel : ObservableObject, IDisposable
             if (_allReadings != null)
             {
                 _sensorService.UpdateReadings(_allReadings);
+                _correctionService.ApplyCorrections(_allReadings);
+                _alertService.CheckAlerts(_allReadings);
+                _sharingService.Update(_allReadings);
 
                 System.Windows.Application.Current?.Dispatcher.BeginInvoke(() =>
                 {
@@ -137,11 +147,25 @@ public partial class SensorViewModel : ObservableObject, IDisposable
         catch { }
     }
 
+    public void SetPollingInterval(int ms)
+    {
+        if (ms < 100) ms = 100; // 最小100ms
+        _pollingIntervalMs = ms;
+
+        if (_backgroundTimer != null && _isMonitoring)
+        {
+            _backgroundTimer.Change(
+                TimeSpan.FromMilliseconds(ms),
+                TimeSpan.FromMilliseconds(ms));
+        }
+    }
+
     public void Dispose()
     {
         if (_disposed) return;
         _disposed = true;
         StopMonitoring();
+        _sharingService.Dispose();
         _sensorService.Dispose();
         GC.SuppressFinalize(this);
     }

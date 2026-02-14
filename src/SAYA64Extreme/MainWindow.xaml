@@ -53,7 +53,7 @@
                 <Button Content="{DynamicResource Toolbar_Report}" Command="{Binding ExportReportCommand}"
                         ToolTip="{DynamicResource Tooltip_Report}"/>
                 <Separator/>
-                <TextBlock Text="SAYA64 Extreme v2.0.0" VerticalAlignment="Center"
+                <TextBlock Text="SAYA64 Extreme v2.1.0" VerticalAlignment="Center"
                            Foreground="{StaticResource AccentBrush}" FontWeight="Bold" Margin="8,0"/>
             </ToolBar>
         </ToolBarTray>

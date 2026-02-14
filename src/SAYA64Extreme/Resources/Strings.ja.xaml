@@ -47,7 +47,7 @@
 
     <!-- About Dialog -->
     <sys:String x:Key="About_Title">SAYA64 Extremeについて</sys:String>
-    <sys:String x:Key="About_Message">SAYA64 Extreme v2.0.0
+    <sys:String x:Key="About_Message">SAYA64 Extreme v2.1.0
 
 システム情報・診断ツール
 
@@ -104,5 +104,17 @@ LibreHardwareMonitorで駆動。</sys:String>
     <sys:String x:Key="Cat_Benchmark">ベンチマーク</sys:String>
     <sys:String x:Key="Cat_MemoryBenchmark">メモリベンチマーク</sys:String>
     <sys:String x:Key="Cat_CPUBenchmark">CPUベンチマーク</sys:String>
+    <sys:String x:Key="Cat_FPUBenchmark">FPUベンチマーク</sys:String>
+
+    <!-- Benchmark Status -->
+    <sys:String x:Key="Status_RunningMemBench">メモリベンチマーク実行中...</sys:String>
+    <sys:String x:Key="Status_RunningCpuBench">CPUベンチマーク実行中...</sys:String>
+    <sys:String x:Key="Status_RunningFpuBench">FPUベンチマーク実行中...</sys:String>
+    <sys:String x:Key="Status_BenchmarkReady">「ベンチマーク実行」ボタンをクリックして開始</sys:String>
+    <sys:String x:Key="Bench_TestName">テスト名</sys:String>
+    <sys:String x:Key="Bench_Score">スコア</sys:String>
+    <sys:String x:Key="Bench_Duration">実行時間</sys:String>
+    <sys:String x:Key="Bench_Threads">スレッド数</sys:String>
+    <sys:String x:Key="Bench_Info">詳細</sys:String>
 
 </ResourceDictionary>

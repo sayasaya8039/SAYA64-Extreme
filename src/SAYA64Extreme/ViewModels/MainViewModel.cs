@@ -11,6 +11,9 @@ public partial class MainViewModel : ObservableObject, IDisposable
     private readonly WmiService _wmiService = new();
     private readonly SoftwareService _softwareService = new();
     private readonly BenchmarkService _benchmarkService = new();
+    private readonly MemoryBenchmarkService _memBenchService = new();
+    private readonly CpuBenchmarkService _cpuBenchService = new();
+    private readonly FpuBenchmarkService _fpuBenchService = new();
     private readonly ReportService _reportService;
     private readonly SensorService _sensorService = new();
     private readonly CategoryViewModel _categoryViewModel;
@@ -152,9 +155,16 @@ public partial class MainViewModel : ObservableObject, IDisposable
 
     private void LoadBenchmarkView(string benchId)
     {
+        if (_staticDataCache.TryGetValue(benchId, out var cached))
+        {
+            CurrentItems = new ObservableCollection<object>(cached);
+            StatusText = $"Benchmark - {cached.Count} {LanguageService.GetString("Status_BenchmarkResults")} ({LanguageService.GetString("Status_Cached")})";
+            return;
+        }
+
         var items = new List<SystemItem>
         {
-            new() { Name = "Status", Value = LanguageService.GetString("Status_BenchmarkHint"), CategoryId = benchId }
+            new() { Name = "Status", Value = LanguageService.GetString("Status_BenchmarkReady"), CategoryId = benchId }
         };
         CurrentItems = new ObservableCollection<object>(items);
         StatusText = $"Benchmark - {benchId}";
@@ -197,13 +207,35 @@ public partial class MainViewModel : ObservableObject, IDisposable
     }
 
     [RelayCommand]
-    private void RunBenchmark()
+    private async Task RunBenchmark()
     {
-        StatusText = LanguageService.GetString("Status_RunningBenchmark");
+        var benchId = _currentCategoryId.StartsWith("bench") ? _currentCategoryId : "bench-memory";
+
         try
         {
-            var results = _benchmarkService.RunMemoryBenchmark();
-            _staticDataCache["bench-memory"] = results;
+            List<SystemItem> results;
+
+            switch (benchId)
+            {
+                case "bench-memory":
+                    StatusText = LanguageService.GetString("Status_RunningMemBench");
+                    results = await Task.Run(() => ConvertBenchResults(_memBenchService.RunAll()));
+                    break;
+                case "bench-cpu":
+                    StatusText = LanguageService.GetString("Status_RunningCpuBench");
+                    results = await Task.Run(() => ConvertBenchResults(_cpuBenchService.RunAll()));
+                    break;
+                case "bench-fpu":
+                    StatusText = LanguageService.GetString("Status_RunningFpuBench");
+                    results = await Task.Run(() => ConvertBenchResults(_fpuBenchService.RunAll()));
+                    break;
+                default:
+                    StatusText = LanguageService.GetString("Status_RunningBenchmark");
+                    results = await Task.Run(() => _benchmarkService.RunMemoryBenchmark());
+                    break;
+            }
+
+            _staticDataCache[benchId] = results;
             CurrentItems = new ObservableCollection<object>(results);
             StatusText = $"{LanguageService.GetString("Status_BenchmarkComplete")} - {results.Count} {LanguageService.GetString("Status_BenchmarkResults")}";
         }
@@ -211,6 +243,21 @@ public partial class MainViewModel : ObservableObject, IDisposable
         {
             StatusText = $"{LanguageService.GetString("Status_BenchmarkError")}{ex.Message}";
         }
+    }
+
+    private static List<SystemItem> ConvertBenchResults(List<BenchmarkResult> benchResults)
+    {
+        var items = new List<SystemItem>();
+        foreach (var r in benchResults)
+        {
+            items.Add(new SystemItem { Name = r.TestName, Value = $"{r.Score} {r.Unit}", CategoryId = r.Category });
+            items.Add(new SystemItem { Name = "  Duration", Value = $"{r.DurationMs:F0} ms", CategoryId = r.Category });
+            items.Add(new SystemItem { Name = "  Threads", Value = r.ThreadCount.ToString(), CategoryId = r.Category });
+            items.Add(new SystemItem { Name = "  Info", Value = r.SimdInfo, CategoryId = r.Category });
+            items.Add(new SystemItem { Name = "---", Value = "---", CategoryId = r.Category });
+        }
+        if (items.Count > 0) items.RemoveAt(items.Count - 1);
+        return items;
     }
 
     public void Dispose()

@@ -6,26 +6,21 @@ using SAYA64Extreme.Services;
 
 namespace SAYA64Extreme.ViewModels;
 
-/// <summary>
-/// ベンチマーク実行UIのViewModel。
-/// MainViewModelから利用され、結果をSystemItemリストとして提供する。
-/// </summary>
 public partial class BenchmarkViewModel : ObservableObject
 {
-    private readonly BenchmarkService _benchmarkService = new();
+    private readonly MemoryBenchmarkService _memoryBench = new();
+    private readonly CpuBenchmarkService _cpuBench = new();
+    private readonly FpuBenchmarkService _fpuBench = new();
 
     [ObservableProperty]
-    private ObservableCollection<SystemItem> benchmarkResults = new();
+    private ObservableCollection<BenchmarkResult> benchmarkResults = new();
 
     [ObservableProperty]
     private bool isRunning;
 
     [ObservableProperty]
-    private string benchmarkStatus = "Ready - Click 'Run' to start memory benchmark";
+    private string benchmarkStatus = "Ready";
 
-    /// <summary>
-    /// ベンチマーク完了時のコールバック。MainViewModelから購読される。
-    /// </summary>
     public event Action? BenchmarkCompleted;
 
     [RelayCommand(CanExecute = nameof(CanRunBenchmark))]
@@ -33,24 +28,64 @@ public partial class BenchmarkViewModel : ObservableObject
     {
         IsRunning = true;
         BenchmarkStatus = "Running memory benchmark...";
-        BenchmarkResults.Clear();
-
         try
         {
-            var results = await Task.Run(() => _benchmarkService.RunMemoryBenchmark());
-            BenchmarkResults = new ObservableCollection<SystemItem>(results);
-            BenchmarkStatus = $"Benchmark complete - {results.Count} results";
+            var results = await Task.Run(() => _memoryBench.RunAll());
+            BenchmarkResults = new ObservableCollection<BenchmarkResult>(results);
+            BenchmarkStatus = $"Memory benchmark complete - {results.Count} results";
         }
         catch (Exception ex)
         {
             BenchmarkStatus = $"Benchmark failed: {ex.Message}";
-            BenchmarkResults.Add(new SystemItem { Name = "Error", Value = ex.Message, CategoryId = "bench-memory" });
         }
         finally
         {
             IsRunning = false;
         }
+        BenchmarkCompleted?.Invoke();
+    }
 
+    [RelayCommand(CanExecute = nameof(CanRunBenchmark))]
+    private async Task RunCpuBenchmark()
+    {
+        IsRunning = true;
+        BenchmarkStatus = "Running CPU benchmark...";
+        try
+        {
+            var results = await Task.Run(() => _cpuBench.RunAll());
+            foreach (var r in results) BenchmarkResults.Add(r);
+            BenchmarkStatus = $"CPU benchmark complete - {results.Count} results";
+        }
+        catch (Exception ex)
+        {
+            BenchmarkStatus = $"CPU benchmark failed: {ex.Message}";
+        }
+        finally
+        {
+            IsRunning = false;
+        }
+        BenchmarkCompleted?.Invoke();
+    }
+
+    [RelayCommand(CanExecute = nameof(CanRunBenchmark))]
+    private async Task RunFpuBenchmark()
+    {
+        IsRunning = true;
+        BenchmarkStatus = "Running FPU benchmark...";
+        try
+        {
+            var results = await Task.Run(() => _fpuBench.RunAll());
+            foreach (var r in results) BenchmarkResults.Add(r);
+            BenchmarkStatus = $"FPU benchmark complete - {results.Count} results";
+        }
+        catch (Exception ex)
+        {
+            BenchmarkStatus = $"FPU benchmark failed: {ex.Message}";
+        }
+        finally
+        {
+            IsRunning = false;
+        }
         BenchmarkCompleted?.Invoke();
     }
 
@@ -59,22 +94,24 @@ public partial class BenchmarkViewModel : ObservableObject
     partial void OnIsRunningChanged(bool value)
     {
         RunMemoryBenchmarkCommand.NotifyCanExecuteChanged();
+        RunCpuBenchmarkCommand.NotifyCanExecuteChanged();
+        RunFpuBenchmarkCommand.NotifyCanExecuteChanged();
     }
 
-    /// <summary>
-    /// 結果をSystemItemリストとして返す（MainViewModelのCurrentItems用）。
-    /// </summary>
     public List<SystemItem> GetResults()
     {
         if (BenchmarkResults.Count == 0)
         {
             return new List<SystemItem>
             {
-                new() { Name = "Memory Benchmark", Value = "Not yet run", CategoryId = "bench-memory" },
-                new() { Name = "---", Value = "---", CategoryId = "bench-memory" },
-                new() { Name = "Action", Value = "Use Tools > Memory Benchmark to run", CategoryId = "bench-memory" }
+                new() { Name = "Benchmark", Value = "Not yet run", CategoryId = "benchmark" }
             };
         }
-        return new List<SystemItem>(BenchmarkResults);
+        return BenchmarkResults.Select(r => new SystemItem
+        {
+            Name = r.TestName,
+            Value = $"{r.Score} {r.Unit}",
+            CategoryId = r.Category
+        }).ToList();
     }
 }

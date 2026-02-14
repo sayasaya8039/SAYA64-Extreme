@@ -47,7 +47,7 @@
 
     <!-- About Dialog -->
     <sys:String x:Key="About_Title">About SAYA64 Extreme</sys:String>
-    <sys:String x:Key="About_Message">SAYA64 Extreme v2.0.0
+    <sys:String x:Key="About_Message">SAYA64 Extreme v2.1.0
 
 System Information &amp; Diagnostic Tool
 
@@ -104,5 +104,17 @@ Powered by LibreHardwareMonitor.</sys:String>
     <sys:String x:Key="Cat_Benchmark">Benchmark</sys:String>
     <sys:String x:Key="Cat_MemoryBenchmark">Memory Benchmark</sys:String>
     <sys:String x:Key="Cat_CPUBenchmark">CPU Benchmark</sys:String>
+    <sys:String x:Key="Cat_FPUBenchmark">FPU Benchmark</sys:String>
+
+    <!-- Benchmark Status -->
+    <sys:String x:Key="Status_RunningMemBench">Running memory benchmark...</sys:String>
+    <sys:String x:Key="Status_RunningCpuBench">Running CPU benchmark...</sys:String>
+    <sys:String x:Key="Status_RunningFpuBench">Running FPU benchmark...</sys:String>
+    <sys:String x:Key="Status_BenchmarkReady">Click 'Run Benchmark' to start</sys:String>
+    <sys:String x:Key="Bench_TestName">Test Name</sys:String>
+    <sys:String x:Key="Bench_Score">Score</sys:String>
+    <sys:String x:Key="Bench_Duration">Duration</sys:String>
+    <sys:String x:Key="Bench_Threads">Threads</sys:String>
+    <sys:String x:Key="Bench_Info">Details</sys:String>
 
 </ResourceDictionary>

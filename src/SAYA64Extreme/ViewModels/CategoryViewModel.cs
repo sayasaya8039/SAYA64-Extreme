@@ -127,7 +127,8 @@ public partial class CategoryViewModel : ObservableObject
                 Children = new ObservableCollection<CategoryNode>
                 {
                     new() { Id = "bench-memory", Name = L("Cat_MemoryBenchmark"), Icon = "\U0001F4BE" },
-                    new() { Id = "bench-cpu", Name = L("Cat_CPUBenchmark"), Icon = "\u26A1" }
+                    new() { Id = "bench-cpu", Name = L("Cat_CPUBenchmark"), Icon = "\u26A1" },
+                    new() { Id = "bench-fpu", Name = L("Cat_FPUBenchmark"), Icon = "\U0001F4D0" }
                 }
             }
         };
