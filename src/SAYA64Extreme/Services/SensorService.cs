@@ -4,9 +4,32 @@ using System.Collections.ObjectModel;
 
 namespace SAYA64Extreme.Services;
 
+/// <summary>
+/// LibreHardwareMonitor の IVisitor 実装。
+/// hardware.Update() + SubHardware の再帰的更新を確実に行う。
+/// </summary>
+internal sealed class UpdateVisitor : IVisitor
+{
+    public void VisitComputer(IComputer computer)
+    {
+        computer.Traverse(this);
+    }
+
+    public void VisitHardware(IHardware hardware)
+    {
+        hardware.Update();
+        foreach (var sub in hardware.SubHardware)
+            sub.Accept(this);
+    }
+
+    public void VisitSensor(ISensor sensor) { }
+    public void VisitParameter(IParameter parameter) { }
+}
+
 public class SensorService : IDisposable
 {
     private readonly Computer _computer;
+    private readonly UpdateVisitor _visitor = new();
     private readonly Dictionary<string, ISensor> _sensorMap = new(256);
     private bool _isOpen;
 
@@ -18,6 +41,7 @@ public class SensorService : IDisposable
             IsGpuEnabled = true,
             IsMemoryEnabled = true,
             IsMotherboardEnabled = true,
+            IsControllerEnabled = true,
             IsStorageEnabled = true,
             IsNetworkEnabled = true
         };
@@ -28,6 +52,7 @@ public class SensorService : IDisposable
         if (!_isOpen)
         {
             _computer.Open();
+            _computer.Accept(_visitor);
             _isOpen = true;
         }
     }
@@ -46,15 +71,12 @@ public class SensorService : IDisposable
         var readings = new ObservableCollection<SensorReading>();
         if (!_isOpen) return readings;
 
+        // Visitor で全ハードウェアを再帰的に更新
+        _computer.Accept(_visitor);
+
         foreach (var hardware in _computer.Hardware)
         {
-            hardware.Update();
-            foreach (var subHardware in hardware.SubHardware)
-            {
-                subHardware.Update();
-                AddSensors(readings, subHardware.Sensors, subHardware.Name);
-            }
-            AddSensors(readings, hardware.Sensors, hardware.Name);
+            CollectSensors(readings, hardware);
         }
         return readings;
     }
@@ -63,18 +85,13 @@ public class SensorService : IDisposable
     {
         if (!_isOpen) return;
 
+        // Visitor で全ハードウェアを再帰的に更新
+        _computer.Accept(_visitor);
+
         _sensorMap.Clear();
         foreach (var hardware in _computer.Hardware)
         {
-            hardware.Update();
-            foreach (var subHardware in hardware.SubHardware)
-            {
-                subHardware.Update();
-                foreach (var sensor in subHardware.Sensors)
-                    _sensorMap[$"{subHardware.Name}/{sensor.Name}/{sensor.SensorType}"] = sensor;
-            }
-            foreach (var sensor in hardware.Sensors)
-                _sensorMap[$"{hardware.Name}/{sensor.Name}/{sensor.SensorType}"] = sensor;
+            BuildSensorMap(hardware);
         }
 
         foreach (var reading in existingReadings)
@@ -99,6 +116,33 @@ public class SensorService : IDisposable
                         reading.MaxValue = maxFormatted;
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// ハードウェアとその全SubHardwareからセンサーを再帰的に収集
+    /// </summary>
+    private void CollectSensors(ObservableCollection<SensorReading> readings, IHardware hardware)
+    {
+        AddSensors(readings, hardware.Sensors, hardware.Name);
+
+        foreach (var sub in hardware.SubHardware)
+        {
+            CollectSensors(readings, sub);
+        }
+    }
+
+    /// <summary>
+    /// ハードウェアとその全SubHardwareのセンサーをマップに再帰的に登録
+    /// </summary>
+    private void BuildSensorMap(IHardware hardware)
+    {
+        foreach (var sensor in hardware.Sensors)
+            _sensorMap[$"{hardware.Name}/{sensor.Name}/{sensor.SensorType}"] = sensor;
+
+        foreach (var sub in hardware.SubHardware)
+        {
+            BuildSensorMap(sub);
         }
     }
 
