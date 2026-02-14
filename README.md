@@ -2,7 +2,7 @@
 
 **Windows向け 高機能システム情報 & 診断ユーティリティ**
 
-SAYA64 Extremeは、AIDA64にインスパイアされたオープンソースのシステム情報・ハードウェア監視・ベンチマークツールです。WPF + .NET 8で構築され、Catppuccin Mochaベースのダークテーマ UI を搭載しています。
+SAYA64 Extremeは、AIDA64にインスパイアされたオープンソースのシステム情報・ハードウェア監視・ベンチマークツールです。WPF + .NET 8で構築され、Catppuccin Mocha（ダーク）/ Latte（ライト）の切り替え可能なテーマUIを搭載しています。
 
 <!-- スクリーンショットを追加する場合 -->
 <!-- ![SAYA64 Extreme](docs/screenshot.png) -->
@@ -64,10 +64,10 @@ SAYA64 Extremeは、AIDA64にインスパイアされたオープンソースの
 | Sin(z) Julia | 三角関数演算 (MPixel/s) |
 
 ### その他の機能
+- **ダーク / ライトモード切り替え** - Catppuccin Mocha（ダーク）/ Latte（ライト）をランタイムで即時切替、設定は自動保存
 - **日本語 / 英語切り替え** - ランタイムで即座に言語変更
 - **HTMLレポート出力** - 全システム情報をスタイル付きHTMLで出力
 - **システムトレイ常駐** - 最小化でトレイに格納、ダブルクリックで復元
-- **ダークテーマ UI** - Catppuccin Mocha配色
 
 ## システム要件
 
@@ -81,7 +81,10 @@ SAYA64 Extremeは、AIDA64にインスパイアされたオープンソースの
 ## インストール
 
 ### インストーラー版（推奨）
-`installer/output/` にある `SAYA64Extreme_v2.1.0_Setup.exe` を実行してください。.NET 8ランタイムを含む自己完結型のため、追加のランタイムインストールは不要です。
+[Releases](https://github.com/sayasaya8039/SAYA64-Extreme/releases/latest)から `SAYA64Extreme_v2.2.0_Setup.exe` をダウンロードして実行してください。.NET 8ランタイムを含む自己完結型のため、追加のランタイムインストールは不要です。
+
+### ポータブル版
+同じく[Releases](https://github.com/sayasaya8039/SAYA64-Extreme/releases/latest)から `SAYA64Extreme.exe` をダウンロードし、任意のフォルダに配置して実行してください。インストール不要の単一ファイル版です。
 
 ### ソースからビルド
 
@@ -115,7 +118,7 @@ dotnet publish src/SAYA64Extreme/SAYA64Extreme.csproj \
 | アーキテクチャ | MVVM (CommunityToolkit.Mvvm 8.4.0) |
 | ハードウェア監視 | LibreHardwareMonitorLib 0.9.4 |
 | ハードウェア情報 | WMI (Windows Management Instrumentation) |
-| テーマ | Catppuccin Mocha ベース |
+| テーマ | Catppuccin Mocha (ダーク) / Latte (ライト) |
 | インストーラー | Inno Setup 6 |
 
 ## プロジェクト構成
@@ -139,6 +142,7 @@ SAYA64 Extreme/
 │   │   ├── SensorService.cs
 │   │   ├── SoftwareService.cs
 │   │   ├── LanguageService.cs
+│   │   ├── ThemeService.cs
 │   │   ├── ReportService.cs
 │   │   ├── MemoryBenchmarkService.cs
 │   │   ├── CpuBenchmarkService.cs
@@ -148,6 +152,8 @@ SAYA64 Extreme/
 │   │   ├── Strings.ja.xaml
 │   │   ├── Strings.en.xaml
 │   │   ├── Styles.xaml
+│   │   ├── Theme.Dark.xaml
+│   │   ├── Theme.Light.xaml
 │   │   └── app.ico
 │   ├── MainWindow.xaml      # メインウィンドウUI
 │   └── SAYA64Extreme.csproj
@@ -164,8 +170,9 @@ SAYA64 Extreme/
 3. **センサー監視** - 「センサー」カテゴリでリアルタイム値を確認
 4. **ベンチマーク** - ツールバーまたはメニューから実行
 5. **レポート出力** - ツールバーの「レポート」ボタンでHTML出力
-6. **言語切り替え** - メニュー > 言語 から日本語/英語を選択
-7. **トレイ格納** - ウィンドウ最小化でシステムトレイに常駐
+6. **テーマ切替** - メニュー > 表示 からダーク/ライトモードを選択
+7. **言語切り替え** - メニュー > 言語 から日本語/英語を選択
+8. **トレイ格納** - ウィンドウ最小化でシステムトレイに常駐
 
 ## ライセンス
 

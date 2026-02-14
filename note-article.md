@@ -4,7 +4,7 @@
 
 PCの詳細なハードウェア情報を一覧表示し、リアルタイムでセンサー値を監視し、ベンチマークまで実行できるWindows定番ツール「AIDA64」。あのツールを**Claude Codeだけで、ゼロからフルスクラッチ**で作ってみました。
 
-完成したのが**SAYA64 Extreme v2.1.0** ― WPF + .NET 8製のシステム情報&診断ユーティリティです。
+完成したのが**SAYA64 Extreme v2.2.0** ― WPF + .NET 8製のシステム情報&診断ユーティリティです。
 
 この記事では、Claude Codeとの共同開発でどんなアプリが出来上がったのか、どういう開発プロセスだったのかを紹介します。
 
@@ -22,7 +22,7 @@ AIDA64のような「システム情報の収集・表示」「リアルタイ�
 - メモリ / CPU / FPU の11種類のベンチマークテスト
 - HTMLレポート出力
 - 日本語 / 英語のランタイム切り替え
-- Catppuccin Mochaベースのダークテーマ
+- **ダーク / ライトモード切り替え** ― Catppuccin Mocha（ダーク）/ Latte（ライト）をランタイムで即時切替
 - システムトレイ常駐
 
 ### 技術スタック
@@ -34,7 +34,7 @@ AIDA64のような「システム情報の収集・表示」「リアルタイ�
 | アーキテクチャ | MVVM (CommunityToolkit.Mvvm) |
 | センサー | LibreHardwareMonitorLib 0.9.4 |
 | ハードウェア情報 | WMI |
-| テーマ | Catppuccin Mocha |
+| テーマ | Catppuccin Mocha / Latte（ダーク・ライト切替対応） |
 | インストーラー | Inno Setup 6 |
 
 ---
@@ -77,6 +77,17 @@ AIDA64のような「システム情報の収集・表示」「リアルタイ�
 - FPU ― Julia Set、Mandelbrot Set、Sin(z) Julia
 
 2つのエージェントが完了した後、UIに統合してv2.1.0に。
+
+### Phase 4：ダーク / ライトモード切り替え
+
+v2.2.0ではテーマ切り替え機能を追加しました。
+
+- `Styles.xaml` からカラー/ブラシ定義を `Theme.Dark.xaml`（Catppuccin Mocha）/ `Theme.Light.xaml`（Catppuccin Latte）に分離
+- 全ての `StaticResource` を `DynamicResource` に変更し、ランタイムでの即時反映を実現
+- `ThemeService` を既存の `LanguageService` と同じ `ResourceDictionary` 動的差し替えパターンで実装
+- テーマ選択は `theme.conf` に自動保存され、次回起動時に復元
+
+メニュー「表示」からワンクリックでダーク⇔ライトを切り替えられます。既存のスタイル定義はそのまま活かしつつ、カラー定義だけを差し替える設計にしたため、影響範囲を最小限に抑えられました。
 
 ### バグとの戦い
 
@@ -152,9 +163,11 @@ XAMLのDataGridが`{Binding Value}`で参照しているのに、`SensorReading`
 
 ## UIデザイン
 
-### Catppuccin Mochaテーマ
+### Catppuccin テーマ（ダーク / ライト）
 
-AIDA64のクラシックなUIではなく、モダンなダークテーマを採用しました。
+AIDA64のクラシックなUIではなく、Catppuccin カラーパレットを採用。v2.2.0からダーク/ライトモードの切り替えに対応しています。
+
+**ダークモード（Catppuccin Mocha）**
 
 | 要素 | カラーコード |
 |---|---|
@@ -163,8 +176,16 @@ AIDA64のクラシックなUIではなく、モダンなダークテーマを採
 | ヘッダー | `#181825` |
 | アクセント | `#7AA2F7` |
 | テキスト | `#CDD6F4` |
-| サブテキスト | `#A6ADC8` |
-| ボーダー | `#45475A` |
+
+**ライトモード（Catppuccin Latte）**
+
+| 要素 | カラーコード |
+|---|---|
+| 背景（Primary） | `#EFF1F5` |
+| 背景（Secondary） | `#E6E9EF` |
+| ヘッダー | `#DCE0E8` |
+| アクセント | `#1E66F5` |
+| テキスト | `#4C4F69` |
 
 ### 2ペインレイアウト
 
@@ -192,7 +213,11 @@ AIDA64のクラシックなUIではなく、モダンなダークテーマを採
 
 ### インストーラー版
 
-`SAYA64Extreme_v2.1.0_Setup.exe`を実行するだけ。.NET 8ランタイム同梱の自己完結型なので、追加インストール不要です。
+[Releases](https://github.com/sayasaya8039/SAYA64-Extreme/releases/latest)から`SAYA64Extreme_v2.2.0_Setup.exe`をダウンロードして実行するだけ。.NET 8ランタイム同梱の自己完結型なので、追加インストール不要です。
+
+### ポータブル版
+
+同じく[Releases](https://github.com/sayasaya8039/SAYA64-Extreme/releases/latest)から`SAYA64Extreme.exe`をダウンロード。インストール不要の単一ファイル版です。
 
 ### ソースからビルド
 
@@ -211,12 +236,13 @@ dotnet build src/SAYA64Extreme/SAYA64Extreme.csproj
 Claude Codeを使って、AIDA64クローンの「SAYA64 Extreme」をフルスクラッチで開発しました。
 
 **開発成果**
-- C#ソースファイル 21個
-- XAML 6ファイル
-- 14のサービスクラス
+- C#ソースファイル 22個
+- XAML 8ファイル（テーマ2ファイル追加）
+- 15のサービスクラス（ThemeService追加）
 - 11種類のベンチマークテスト
 - 13メインカテゴリ + 20サブカテゴリ
-- 120以上の国際化キー（日/英）
+- 125以上の国際化キー（日/英）
+- ダーク / ライトモード切り替え
 - Inno Setupインストーラー
 
 AIコーディングアシスタントとのペアプロで、WMI、LibreHardwareMonitor、WPF MVVM、unsafeポインタ操作、マルチスレッドベンチマーク、Inno Setupインストーラーなど、幅広い技術領域をカバーしたアプリケーションが完成しました。
@@ -225,7 +251,7 @@ AIコーディングアシスタントとのペアプロで、WMI、LibreHardwar
 
 ---
 
-**GitHub**: (準備中)
+**GitHub**: [sayasaya8039/SAYA64-Extreme](https://github.com/sayasaya8039/SAYA64-Extreme)
 
 **使用ツール**: Claude Code (Anthropic)
 
