@@ -8,7 +8,7 @@
         Icon="Resources/app.ico"
         Height="750" Width="1100" MinHeight="500" MinWidth="800"
         WindowStartupLocation="CenterScreen"
-        Background="{StaticResource PrimaryBgBrush}"
+        Background="{DynamicResource PrimaryBgBrush}"
         StateChanged="Window_StateChanged">
 
     <Window.DataContext>
@@ -28,6 +28,9 @@
                 <Separator/>
                 <MenuItem Header="{DynamicResource Menu_ExpandAll}" Click="ExpandAll_Click"/>
                 <MenuItem Header="{DynamicResource Menu_CollapseAll}" Click="CollapseAll_Click"/>
+                <Separator/>
+                <MenuItem Header="{DynamicResource Menu_ThemeDark}" Click="Theme_Dark_Click"/>
+                <MenuItem Header="{DynamicResource Menu_ThemeLight}" Click="Theme_Light_Click"/>
             </MenuItem>
             <MenuItem Header="{DynamicResource Menu_Report}">
                 <MenuItem Header="{DynamicResource Menu_GenerateReport}" Command="{Binding ExportReportCommand}"/>
@@ -45,8 +48,8 @@
         </Menu>
 
         <!-- Toolbar -->
-        <ToolBarTray DockPanel.Dock="Top" Background="{StaticResource HeaderBgBrush}">
-            <ToolBar Background="{StaticResource HeaderBgBrush}" Band="0" BandIndex="0">
+        <ToolBarTray DockPanel.Dock="Top" Background="{DynamicResource HeaderBgBrush}">
+            <ToolBar Background="{DynamicResource HeaderBgBrush}" Band="0" BandIndex="0">
                 <Button Content="{DynamicResource Toolbar_Refresh}" Command="{Binding RefreshCommand}"
                         ToolTip="{DynamicResource Tooltip_Refresh}"/>
                 <Separator/>
@@ -56,17 +59,17 @@
                         ToolTip="{DynamicResource Tooltip_Report}"/>
                 <Separator/>
                 <TextBlock Text="SAYA64 Extreme v2.1.0" VerticalAlignment="Center"
-                           Foreground="{StaticResource AccentBrush}" FontWeight="Bold" Margin="8,0"/>
+                           Foreground="{DynamicResource AccentBrush}" FontWeight="Bold" Margin="8,0"/>
             </ToolBar>
         </ToolBarTray>
 
         <!-- Status Bar -->
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem>
-                <TextBlock Text="{Binding StatusText}" Foreground="{StaticResource SubTextBrush}"/>
+                <TextBlock Text="{Binding StatusText}" Foreground="{DynamicResource SubTextBrush}"/>
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
-                <TextBlock Text="{Binding SensorUpdateInfo}" Foreground="{StaticResource SubTextBrush}"/>
+                <TextBlock Text="{Binding SensorUpdateInfo}" Foreground="{DynamicResource SubTextBrush}"/>
             </StatusBarItem>
         </StatusBar>
 
@@ -79,7 +82,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Left Pane: TreeView (Page Menu) -->
-            <Border Grid.Column="0" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,1,0">
+            <Border Grid.Column="0" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0">
                 <TreeView x:Name="CategoryTree"
                           ItemsSource="{Binding Categories}"
                           SelectedItemChanged="CategoryTree_SelectedItemChanged"
@@ -107,12 +110,12 @@
                 </Grid.RowDefinitions>
 
                 <!-- Category Header -->
-                <Border Grid.Row="0" Background="{StaticResource HeaderBgBrush}" Padding="12,8">
+                <Border Grid.Row="0" Background="{DynamicResource HeaderBgBrush}" Padding="12,8">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding SelectedCategoryIcon}" FontSize="20"
                                    VerticalAlignment="Center" Margin="0,0,8,0"/>
                         <TextBlock Text="{Binding SelectedCategoryName}" FontSize="16"
-                                   FontWeight="SemiBold" Foreground="{StaticResource AccentBrush}"
+                                   FontWeight="SemiBold" Foreground="{DynamicResource AccentBrush}"
                                    VerticalAlignment="Center"/>
                     </StackPanel>
                 </Border>

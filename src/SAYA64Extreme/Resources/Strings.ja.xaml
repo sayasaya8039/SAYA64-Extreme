@@ -29,6 +29,10 @@
     <sys:String x:Key="Menu_Lang_Japanese">日本語</sys:String>
     <sys:String x:Key="Menu_Lang_English">English</sys:String>
 
+    <!-- Menu: Theme -->
+    <sys:String x:Key="Menu_ThemeDark">ダークモード</sys:String>
+    <sys:String x:Key="Menu_ThemeLight">ライトモード</sys:String>
+
     <!-- Menu: Help -->
     <sys:String x:Key="Menu_Help">ヘルプ(_H)</sys:String>
     <sys:String x:Key="Menu_About">SAYA64 Extremeについて(_A)</sys:String>
@@ -70,6 +74,7 @@ LibreHardwareMonitorで駆動。</sys:String>
     <sys:String x:Key="Status_SensorReadings">件のセンサー読み取り</sys:String>
     <sys:String x:Key="Status_BenchmarkResults">件の結果</sys:String>
     <sys:String x:Key="Status_LanguageChanged">言語を変更しました（一部は再起動後に反映されます）</sys:String>
+    <sys:String x:Key="Status_ThemeChanged">テーマを変更しました</sys:String>
     <sys:String x:Key="Status_SensorActive">センサー監視中</sys:String>
     <sys:String x:Key="Status_SelectCategory">ツリーからカテゴリを選択してください</sys:String>
     <sys:String x:Key="Status_BenchmarkHint">ツールメニューから「ベンチマーク実行」を選択してください</sys:String>

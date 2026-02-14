@@ -167,6 +167,18 @@ public partial class MainWindow : Window
             vm.ChangeLanguage("en");
     }
 
+    private void Theme_Dark_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel vm)
+            vm.ChangeTheme("dark");
+    }
+
+    private void Theme_Light_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel vm)
+            vm.ChangeTheme("light");
+    }
+
     private void About_Click(object sender, RoutedEventArgs e)
     {
         MessageBox.Show(

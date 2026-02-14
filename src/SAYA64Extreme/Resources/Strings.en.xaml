@@ -29,6 +29,10 @@
     <sys:String x:Key="Menu_Lang_Japanese">日本語</sys:String>
     <sys:String x:Key="Menu_Lang_English">English</sys:String>
 
+    <!-- Menu: Theme -->
+    <sys:String x:Key="Menu_ThemeDark">Dark Mode</sys:String>
+    <sys:String x:Key="Menu_ThemeLight">Light Mode</sys:String>
+
     <!-- Menu: Help -->
     <sys:String x:Key="Menu_Help">_Help</sys:String>
     <sys:String x:Key="Menu_About">_About SAYA64 Extreme</sys:String>
@@ -70,6 +74,7 @@ Powered by LibreHardwareMonitor.</sys:String>
     <sys:String x:Key="Status_SensorReadings"> readings</sys:String>
     <sys:String x:Key="Status_BenchmarkResults"> results</sys:String>
     <sys:String x:Key="Status_LanguageChanged">Language changed (some changes apply after restart)</sys:String>
+    <sys:String x:Key="Status_ThemeChanged">Theme changed</sys:String>
     <sys:String x:Key="Status_SensorActive">Sensor monitoring active</sys:String>
     <sys:String x:Key="Status_SelectCategory">Select a category from the tree</sys:String>
     <sys:String x:Key="Status_BenchmarkHint">Click 'Run Benchmark' from Tools menu to start</sys:String>

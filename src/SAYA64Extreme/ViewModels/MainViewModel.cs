@@ -71,6 +71,12 @@ public partial class MainViewModel : ObservableObject, IDisposable
         _categoryViewModel.OnCategorySelected(node);
     }
 
+    public void ChangeTheme(string theme)
+    {
+        ThemeService.SetTheme(theme);
+        StatusText = LanguageService.GetString("Status_ThemeChanged");
+    }
+
     public void ChangeLanguage(string lang)
     {
         LanguageService.SetLanguage(lang);
